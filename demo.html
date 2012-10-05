@@ -1,0 +1,49 @@
+<!doctype html>
+<head>
+	<title>Origami demo</title>
+	<script type="text/javascript" src="http://raw.github.com/DmitryBaranovskiy/raphael/master/raphael-min.js"></script>
+	<script type="text/javascript" src="http://raw.github.com/leszekr/origami-js/master/origami.js"></script>
+</head>
+<body>
+
+	<div id="paperplane"></div>
+<script type="text/javascript">
+
+function init(){
+	var mouse = {x:0, y:0, over: false, stamp: 0, click: false}
+	var animating = false;
+	origami = new Origami("paperplane", 250, 200);
+
+	function paperplane(){
+		var scale=1.0;
+		var midspan = 20*scale;
+		var depth = 20*scale;
+		var length= 70*scale;
+		var wingspan = 100*scale;
+		origami.face({x: -wingspan, y:-length, z:depth},{x: -midspan, y:-length, z:depth},{x:0, y:length, z:depth},200); 
+		origami.face({x: wingspan, y:-length, z:depth},{x:0, y:length, z:depth},{x:midspan, y:-length, z:depth},200);
+		origami.face({x: -midspan, y:-length, z:depth},{x:0, y:length, z:depth},{x:0, y:-length, z:-depth},200); 
+		origami.face({x: midspan, y:-length, z:depth},{x:0, y:-length, z:-depth},{x:0, y:length, z:depth},200); 
+	}
+
+	function animate(){
+		if(!animating){
+			var stamp = new Date().getTime();
+			animating = true;
+			var rX = stamp/1983;
+			var rY = stamp/3200;
+			origami.camera.setAngles(rX,rY);
+			origami.render(origami.camera);
+			animating = false;
+		}
+	}	
+	origami.camera.setAngles(1.0,-2.5);
+	origami.camera.cull = false;//true;
+	paperplane();
+	setInterval(animate,40);
+}
+
+window.onload = init;
+
+</script>
+</body>
